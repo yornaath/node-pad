@@ -49,7 +49,7 @@ class Controller extends events.EventEmitter
         @emit 'error', error
       else
         @setState @processHIDData data
-        if firstRead
+        if firstRead > 0
           @emit 'on'
           firstRead = 0
       if @isReading
