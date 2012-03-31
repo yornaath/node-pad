@@ -50,13 +50,13 @@ Dualshock = (function() {
       triangle: data[22],
       circle: data[23],
       lthumb: {
-        x: data[6],
-        y: data[7],
+        x: data[6] || 1,
+        y: data[7] || 1,
         down: data[2] === 2 ? 1 : 0
       },
       rthumb: {
-        x: data[8],
-        y: data[9],
+        x: data[8] || 1,
+        y: data[9] || 1,
         down: data[2] === 4 ? 1 : 0
       },
       dpad: {
@@ -73,7 +73,7 @@ Dualshock = (function() {
       select: data[2] === 1 ? 1 : 0
     }
   }
-  
+
   return Dualshock
 })()
 
