@@ -12,6 +12,24 @@ Controller = (function() {
   function Controller() {
     this.state = this.layout
     this.previousState = this.state
+    this.buttonPressHistory = []
+    this.buttonPatterns = this.parseLayout()
+    this.buttonPatterns.forEach((function(buttonPattern) {
+      var buttonValue = 0
+      this.on('change:'+buttonPattern, function(newValue) {
+        newValue > 0 && buttonValue === 0 ? this.emit('press:'+buttonPattern, newValue) :
+        buttonValue > 0 && newValue === 0 ? this.emit('release:'+buttonPattern, newValue) :
+                                            void 0
+        buttonValue = newValue
+      })
+      this.on('press:'+buttonPattern, function(buttonValue) {
+        if(this.buttonPressHistory.length > 120) {
+          this.buttonPressHistory.splice(0,60)
+        }
+        this.buttonPressHistory.push(buttonPattern)
+        this.emit('press:', buttonPattern, buttonValue)
+      })
+    }).bind(this))
     this.init()
   }
 
@@ -35,25 +53,15 @@ Controller = (function() {
   }
 
   Controller.prototype.setState = function(state) {
-    var button, stateChanges, value, results
+    var button, stateChanges, value
     this.previousState = this.state
     this.state = state
     stateChanges = this.getStateChanges()
     if (stateChanges) {
-      results = []
       for (button in stateChanges) {
         value = stateChanges[button]
-        results.push(this.emit(button, value))
+        this.emit('change:'+button, value)
       }
-      return results
-    }
-  }
-
-  Controller.prototype.stateHasChanged = function() {
-    if (Controller.compare(this.state, this.previousState)) {
-      return false
-    } else {
-      return true
     }
   }
 
@@ -82,9 +90,9 @@ Controller = (function() {
         }
       }
       if (this.isReading) {
-        return setTimeout(__bind(function() {
+        return setTimeout((function() {
           return this.hid.read(reader)
-        }, this), 5)
+        }).bind(this), 5)
       }
     }).bind(this)
     this.isReading = 1
@@ -100,9 +108,39 @@ Controller = (function() {
   }
 
   Controller.prototype.press = function(pattern, callback) {
-    var source
-    pattern = pattern.split('.')
-    return source = JSON.stringify(pattern).replace(/,/g, '][')
+    this.on('press:'+pattern, callback)
+  }
+
+  Controller.prototype.release = function(pattern, callback) {
+    this.on('release:'+pattern, callback)
+  }
+
+  Controller.prototype.ifNext = function(buttonpPatternCheck, then, elseDo) {
+    this.once('press:', function(buttonPattern, buttonValue) {
+      buttonpPatternCheck === buttonPattern ? 
+        typeof then === 'function' ? then.call(this, buttonValue) : void 0
+      : typeof elseDo === 'function' ? elseDo.call(this, buttonValue) : void 0
+    }) 
+  }
+
+  Controller.prototype.combo = function(comboPattern, callbacks) {
+    var self, args, i, button, next
+    self = this
+    args = arguments
+    i = 0
+    next = function() {
+      typeof callbacks[i] === 'function' ? callbacks[i].call(this, arguments) : void 0
+      i++
+      button = comboPattern[i]
+      if(button) {
+        this.ifNext(button, next, function() {
+          this.combo(comboPattern, callbacks)
+        })
+      } else {
+        this.combo(comboPattern, callbacks)
+      }
+    }
+    this.once('press:'+comboPattern[i], next)
   }
 
   Controller.prototype.getStateChanges = function() {
@@ -123,6 +161,20 @@ Controller = (function() {
       return changes
     }
     return false
+  }
+
+  Controller.prototype.parseLayout = function() {
+    var recurse, strings
+    strings = []
+    recurse = function(o, keystring) {
+      var key, results, keystring
+      for(key in o) {
+        typeof o[key] === 'object' ? recurse(o[key], keystring + '.' + key) :
+                                     strings.push((keystring + '.' + key).replace(/\./, ''))
+      }
+    }
+    recurse(this.layout, '')
+    return strings
   }
 
   Controller.compare = function(obj, cand) {
