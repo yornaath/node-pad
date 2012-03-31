@@ -27,8 +27,10 @@ class Controller extends events.EventEmitter
   setState: (state) ->
     @previousState = @state
     @state = state
-    if @stateHasChanged()
-      @emit 'statechange', @state
+    stateChanges = @getStateChanges()
+    if stateChanges
+      for button, value of stateChanges
+        @emit button, value
   
   stateHasChanged: ->
     if Controller.compare @state, @previousState
@@ -64,6 +66,26 @@ class Controller extends events.EventEmitter
   
   processHIDData: (HIDData) ->
     return HIDData
+  
+  press: (pattern, callback) ->
+    pattern = pattern.split('.')
+    source = JSON.stringify(pattern).replace(/,/g, '][') 
+  
+  getStateChanges: ->
+    haschanges = false
+    changes = {}
+    recurse = (o, oo, keystring)->
+      for key, val of o
+        if typeof val is 'object'
+          recurse val, oo[key], "#{keystring}.#{key}"
+        else
+          if val isnt oo[key]
+            haschanges = true
+            changes[("#{keystring}.#{key}").replace /\./, ''] = val
+    recurse @state, @previousState, ""
+    if haschanges
+      return changes
+    return false
 
   @compare: (obj, cand) ->
     (JSON.stringify obj) is (JSON.stringify cand)

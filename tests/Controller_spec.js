@@ -116,42 +116,79 @@
           return expect(this.newState['button2']).toEqual(1);
         });
       });
-      return describe("Static compare", function() {
-        return it("Should compare two objects and return true or false on match", function() {
-          var o, oo;
-          o = {
-            foo: true,
-            bar: false,
-            obj: {
-              lol: 'lol',
-              foo: 'bar',
-              objk: {
-                i: 1,
-                k: 2,
-                truth: true
-              }
+      describe("map", function() {
+        var EController, controller;
+        EController = (function() {
+          __extends(EController, Controller);
+          function EController() {
+            EController.__super__.constructor.apply(this, arguments);
+          }
+          EController.prototype.layout = {
+            button1: 0,
+            button2: 0,
+            dpad: {
+              up: 0,
+              down: 0,
+              right: 0,
+              left: 0
             }
           };
-          oo = {
-            foo: true,
-            bar: false,
-            obj: {
-              lol: 'lol',
-              foo: 'bar',
-              objk: {
-                i: 1,
-                k: 2,
-                truth: true
-              }
+          return EController;
+        })();
+        controller = null;
+        return beforeEach(function() {
+          return controller = new EController;
+        });
+      });
+      return describe("pressed", function() {
+        var EController, controller;
+        EController = (function() {
+          __extends(EController, Controller);
+          function EController() {
+            EController.__super__.constructor.apply(this, arguments);
+          }
+          EController.prototype.layout = {
+            button1: 0,
+            button2: 0,
+            dpad: {
+              up: 0,
+              down: 0,
+              right: 0,
+              left: 0
             }
           };
-          expect(Controller.compare(o, oo)).toEqual(true);
-          oo.foo = false;
-          expect(Controller.compare(o, oo)).toEqual(false);
-          oo.foo = true;
-          expect(Controller.compare(o, oo)).toEqual(true);
-          oo.obj.objk.i = 0;
-          return expect(Controller.compare(o, oo)).toEqual(false);
+          return EController;
+        })();
+        controller = null;
+        beforeEach(function() {
+          return controller = new EController;
+        });
+        return it("Should map a pressed event to the given button, and fire the callback upon pressed", function() {
+          var self;
+          self = this;
+          controller.press('button1', function() {
+            return self.button1Pressed = true;
+          });
+          controller.setState({
+            button1: 1,
+            button2: 0,
+            dpad: {
+              up: 0,
+              down: 0,
+              right: 0,
+              left: 0
+            }
+          });
+          waitsFor(function() {
+            if (this.button1Pressed) {
+              return true;
+            } else {
+              return false;
+            }
+          }, 'button1 never pressed', 100);
+          return runs(function() {
+            return expect(this.button1Pressed).toEqual(true);
+          });
         });
       });
     });
