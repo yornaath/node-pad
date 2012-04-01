@@ -70,6 +70,19 @@ dualshock.combo([
 ])
 ```
 
+```javascript
+dualshock.combo([
+  'dpad.down',
+  ['dpad.down', 'dpad.right'],
+  'dpad,right',
+  'square'
+], [
+  null,
+  null,
+  hadouken
+])
+```
+
 
 
 
