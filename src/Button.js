@@ -11,7 +11,9 @@ Button = (function(){
 
   function Button() {
     Button.__super__.constructor.apply(this, arguments)
+    
     var state = 0
+
     Object.defineProperty(this, "state", {
       get: function() {
         return state
