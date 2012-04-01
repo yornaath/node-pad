@@ -19,12 +19,12 @@ Dualshock = (function() {
     square: 0,
     triangle: 0,
     circle: 0,
-    lthumb: {
+    lstick: {
       x: 0,
       y: 0,
       down: 0
     },
-    rthumb: {
+    rstick: {
       x: 0,
       y: 0,
       down: 0
@@ -49,12 +49,12 @@ Dualshock = (function() {
       square: data[25],
       triangle: data[22],
       circle: data[23],
-      lthumb: {
+      lstick: {
         x: data[6] || 1,
         y: data[7] || 1,
         down: data[2] === 2 ? 1 : 0
       },
-      rthumb: {
+      rstick: {
         x: data[8] || 1,
         y: data[9] || 1,
         down: data[2] === 4 ? 1 : 0

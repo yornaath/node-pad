@@ -16,6 +16,9 @@ Controller = (function() {
     this.pressed = {}
     this.buttonPatterns = this.parseLayout()
     this.buttonPatterns.forEach((function(buttonPattern) {
+      if(buttonPattern.match('stick')) {
+        return
+      }
       var buttonValue = 0
       this.on('change:'+buttonPattern, function(newValue) {
         newValue > 0 && buttonValue === 0 ? this.emit('press:'+buttonPattern, newValue) :
@@ -113,12 +116,29 @@ Controller = (function() {
   }
 
   Controller.prototype.press = function(pattern, callback) {
-    if(typeof pattern === string) {
-      this.on('press:'+pattern, callback) : 
+    if(typeof pattern === 'string') {
+      this.on('press:'+pattern, callback)
     }
     if(typeof pattern === 'object') {
-      
+      this.on('press:', function() {
+        Controller.matchPatterns(pattern, Object.keys(this.pressed)) ? callback.call(this, arguments) : void 0
+      })
     }
+  }
+
+  Controller.matchPatterns = function(pattern, patternCheck) {
+    if(pattern.length !== patternCheck.length) {
+      return
+    }
+    var matches = 0
+    patternCheck.forEach(function(button) {
+      pattern.forEach(function(buttonCheck) {
+        if(button === buttonCheck) {
+          matches++
+        }
+      })
+    })
+    return matches === pattern.length
   }
 
   Controller.prototype.release = function(pattern, callback) {
@@ -126,11 +146,30 @@ Controller = (function() {
   }
 
   Controller.prototype.ifNext = function(buttonpPatternCheck, then, elseDo) {
-    this.once('press:', function(buttonPattern, buttonValue) {
-      buttonpPatternCheck === buttonPattern ? 
-        typeof then === 'function' ? then.call(this, buttonValue) : void 0
-      : typeof elseDo === 'function' ? elseDo.call(this, buttonValue) : void 0
-    }) 
+    typeof buttonpPatternCheck === 'string' ?
+      this.once('press:', function(buttonPattern, buttonValue) {
+        buttonpPatternCheck === buttonPattern ? 
+          typeof then === 'function' ? then.call(this, buttonValue) : void 0
+        : typeof elseDo === 'function' ? elseDo.call(this, buttonValue) : void 0
+      })
+    : typeof buttonpPatternCheck === 'object' ? 
+      (function() {
+        var handler = function(buttonPattern, buttonValue) {
+          var pressed = Object.keys(this.pressed)
+          if(pressed.length <= buttonpPatternCheck.length) {
+            Controller.matchPatterns(pressed, buttonpPatternCheck) &&  typeof then === 'function' ? (function() {
+              then.call(this, buttonValue)
+              this.removeListener('press:', handler)
+            }).call(this) : void 0
+          } else {
+            this.removeListener('press:', handler)
+            typeof elseDo === 'function' ? elseDo.call(this, buttonValue) : void 0
+          }
+        }
+        this.on('press:', handler)
+      }).call(this)
+    : void 0
+      
   }
 
   Controller.prototype.combo = function(comboPattern, callbacks) {

@@ -25,6 +25,18 @@ dualshock.release('cross', function(pressure) {
 })
 */
 
+dualshock.combo([
+  'dpad.down',
+  ['dpad.down', 'dpad.right'],
+  'square'
+], [
+  function() { console.log('DOWN') },
+  function() { console.log('DOWN RIGHT') },
+  function() {
+    console.log('HADOUKEN!');
+  }
+])
+
 dualshock.press(['triangle', 'circle'], function() {
   console.log('triangle AND cirlce pressed');
 })

@@ -74,10 +74,8 @@ dualshock.combo([
 dualshock.combo([
   'dpad.down',
   ['dpad.down', 'dpad.right'],
-  'dpad,right',
   'square'
 ], [
-  null,
   null,
   null,
   hadouken
