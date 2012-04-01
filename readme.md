@@ -33,7 +33,13 @@ dualshock.release('cross', function() {
 })
 ```
 
-#### Combos
+#### Mapping button combinations
+```javascript
+dualshock.press(['circle', 'triangle'], grab)
+dualshock.press(['dpad.up', 'circle'], jumpKick)
+```
+
+#### Combo series
 ```javascript
 dualshock.combo([
   'cross',
@@ -50,5 +56,23 @@ dualshock.combo([
     console.log('HAYMAKER! ', pressure);
   }
 ], 1000)
-
 ```
+
+```javascript
+dualshock.combo([
+  'dpad.left',
+  'dpad.left',
+  'triangle'
+], [
+  null,
+  startRunningLeft,
+  runningSlideKick
+])
+```
+
+
+
+
+
+
+
