@@ -31,6 +31,7 @@ dualshock.press('cross', function(pressure) {
 dualshock.release('cross', function() {
   console.log('release cross!');
 })
+```
 
 #### Combos
 ```javascript
