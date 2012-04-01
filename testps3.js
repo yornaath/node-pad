@@ -15,6 +15,34 @@ dualshock.on('disconnected', function() {
   console.log('Controller disconnected')
 })
 
+
+dualshock.contxt('ground')
+
+dualshock.contxt('ground', function() {
+  dualshock.press('circle', function() {
+    console.log('kick!');
+  })
+})
+
+dualshock.contxt('air', function() {
+  dualshock.press('circle', function() {
+    console.log('AIRBORN kick!');
+  })
+})
+
+dualshock.press('dpad.up', function() {
+  console.log('jump')
+  dualshock.contxt('air')
+  setTimeout(function() {
+    console.log('landed')
+    dualshock.contxt('ground')
+  },1000)
+})
+
+
+
+
+
 /*
 dualshock.press('cross', function(pressure) {
   console.log('bashed cross! pressure: ', pressure);
@@ -24,7 +52,7 @@ dualshock.release('cross', function(pressure) {
   console.log('bashed cross! pressure: ', pressure);
 })
 */
-
+/*
 dualshock.combo([
   'dpad.down',
   ['dpad.down', 'dpad.right'],
@@ -56,4 +84,4 @@ dualshock.combo([
     console.log('HAYMAKER! ', pressure);
   }
 ], 1000)
-
+*/

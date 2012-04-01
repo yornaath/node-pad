@@ -10,6 +10,7 @@ Controller = (function() {
   classextends(Controller, events.EventEmitter)
   
   function Controller() {
+    this.context = ''
     this.state = this.layout
     this.previousState = this.state
     this.buttonPressHistory = []
@@ -126,6 +127,10 @@ Controller = (function() {
     }
   }
 
+  Controller.prototype.release = function(pattern, callback) {
+    this.on('release:'+pattern, callback)
+  }
+
   Controller.matchPatterns = function(pattern, patternCheck) {
     if(pattern.length !== patternCheck.length) {
       return
@@ -139,10 +144,6 @@ Controller = (function() {
       })
     })
     return matches === pattern.length
-  }
-
-  Controller.prototype.release = function(pattern, callback) {
-    this.on('release:'+pattern, callback)
   }
 
   Controller.prototype.ifNext = function(buttonpPatternCheck, then, elseDo) {
@@ -225,6 +226,8 @@ Controller = (function() {
     recurse(this.layout, '')
     return strings
   }
+
+  Controller.prototype.contxt = function() {}
 
   Controller.compare = function(obj, cand) {
     return (JSON.stringify(obj)) === (JSON.stringify(cand))
