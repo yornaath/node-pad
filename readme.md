@@ -79,6 +79,7 @@ dualshock.combo([
 ], [
   null,
   null,
+  null,
   hadouken
 ])
 ```
