@@ -11,15 +11,14 @@ PressureButton = (function(){
 
   function PressureButton() {
     PressureButton.__super__.constructor.apply(this, arguments)
-
     Object.defineProperty(this, "pressure", {
       get: function() {
         return this.state
       }
     })
 
-    this.on('statechange', function(state) {
-      this.emit('pressurechange', state)
+    this.on('statechange', function() {
+      this.emit('pressurechange', this.pressure)
     })
   }
 
