@@ -1,7 +1,7 @@
 
 var events = require("events"),
     classextends = require('./classextends'),
-    HID = require("../node-modules/node-hid/src/HID")
+    HID = require("../node_modules/node-hid/src/HID")
 
 var Controller
 
@@ -13,6 +13,7 @@ Controller = (function() {
     this.state = this.layout
     this.previousState = this.state
     this.buttonPressHistory = []
+    this.pressed = {}
     this.buttonPatterns = this.parseLayout()
     this.buttonPatterns.forEach((function(buttonPattern) {
       var buttonValue = 0
@@ -27,7 +28,11 @@ Controller = (function() {
           this.buttonPressHistory.splice(0,60)
         }
         this.buttonPressHistory.push(buttonPattern)
+        this.pressed[buttonPattern] = true
         this.emit('press:', buttonPattern, buttonValue)
+      })
+      this.on('release:'+buttonPattern, function(buttonValue) {
+        delete this.pressed[buttonPattern]
       })
     }).bind(this))
     this.init()
@@ -108,7 +113,12 @@ Controller = (function() {
   }
 
   Controller.prototype.press = function(pattern, callback) {
-    this.on('press:'+pattern, callback)
+    if(typeof pattern === string) {
+      this.on('press:'+pattern, callback) : 
+    }
+    if(typeof pattern === 'object') {
+      
+    }
   }
 
   Controller.prototype.release = function(pattern, callback) {
