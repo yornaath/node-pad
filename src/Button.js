@@ -11,25 +11,23 @@ Button = (function(){
 
   function Button() {
     Button.__super__.constructor.apply(this, arguments)
-    
-    var state = 0
-
-    Object.defineProperty(this, "state", {
-      get: function() {
-        return state
-      },
-      set: function(newState) {
-        var oldState
-        oldState = state
-        state = newState
-        !oldState && newState ? this.emitPress() : 
-        oldState && !newState ? this.emitRelease() :
-                                void 0
-        this.emitStateChange()
-      }
-    })
-
+    this.stateValue = 0
   }
+
+  Object.defineProperty(Button.prototype, "state", {
+    get: function() {
+      return this.stateValue
+    },
+    set: function(newState) {
+      var oldState
+      oldState = this.stateValue
+      this.stateValue = newState
+      !oldState && newState ? this.emitPress() : 
+      oldState && !newState ? this.emitRelease() :
+                              void 0
+      this.emitStateChange()
+    }
+  })
 
   Button.prototype.emitStateChange = function() {
     this.emit('statechange', this.state)
