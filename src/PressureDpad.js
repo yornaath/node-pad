@@ -29,8 +29,6 @@ PressureDpad = (function(){
       return (totalPressure / keysPressed.length)
     }
   })
-
-  PressureDpad.Button = PressureButton
     
   PressureDpad.prototype.emitPress = function(direction) {
     this.emit('press:'+direction, this[direction].state)
