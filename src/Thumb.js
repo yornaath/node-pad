@@ -1,57 +1,95 @@
 
+require('./Object.js')
+
 var events = require("events"),
     classextends = require('./classextends')
 
+
 var Thumb;
+
 
 Thumb = (function(){
   
   classextends(Thumb, events.EventEmitter)
 
-  function Thumb(){
+  function Thumb(options){
     Thumb.__super__.constructor.apply(this, arguments)
-    var x, y
-    x = {
-      state: 0
-    }
-    y = {
-      state: 0
-    }
-
-    Object.defineProperty(this, 'x', {
-      get: function() {
-        return x.state
+    this.config = Thumb.defaultConfig
+    options && options.deadzone ? this.config.deadzone = options.deadzone : void 0
+    this.axis = {
+      x: {
+        state: options && options.x ? options.x : 0
       },
-      set: function(state) {
-        var oldState
-        oldState = x.state
-        x.state = state
-        oldState !== x.state ? this.emitXAxisChange() : void 0
-      }
-    })
+      y: {
+        state: options && options.y ? options.y : 0
+      } 
+    }
+  }
 
-    Object.defineProperty(this, 'y', {
-      get: function() {
-        return y.state
-      },
-      set: function(state) {
-        var oldState
-        oldState = y.state
-        y.state = state
-        oldState !== y.state ? this.emitYAxisChange() : void 0
-      }
-    })
+  Object.defineProperty(Thumb.prototype, 'x', {
+    get: function() {
+      return this.axis.x.state
+    },
+    set: function(state) {
+      var oldState
+      oldState = this.axis.x.state
+      this.axis.x.state = state
+      oldState !== this.axis.x.state ?
+        this.config.deadzone.x !== false ?
+          state < this.config.deadzone.x[0] || state > this.config.deadzone.x[1] ?
+            this.emitXAxisChange()
+          : this.released ? this.emitReleaseEvent() : void 0
+        : this.emitXAxisChange()
+      : void 0
+    }
+  })
 
+  Object.defineProperty(Thumb.prototype, 'y', {
+    get: function() {
+      return this.axis.y.state
+    },
+    set: function(state) {
+      var oldState
+      oldState = this.axis.y.state
+      this.axis.y.state = state
+      oldState !== this.axis.y.state ?
+        this.config.deadzone.y !== false ?
+          state < this.config.deadzone.y[0] || state > this.config.deadzone.y[1] ?
+            this.emitYAxisChange()
+          : this.released ? this.emitReleaseEvent() : void 0
+        : this.emitYAxisChange()
+      : void 0
+    }
+  })
+
+  Object.defineProperty(Thumb.prototype, 'released', {
+    get: function() {
+      return (this.x > this.config.deadzone.x[0] && this.x < this.config.deadzone.x[1]) && 
+      (this.y > this.config.deadzone.y[0] && this.y < this.config.deadzone.y[1]) ?
+        true
+      : false
+    }
+  })
+
+  Thumb.defaultConfig = {
+    deadzone: {
+      x: false,
+      y: false
+    }
   }
 
   Thumb.prototype.emitXAxisChange = function() {
-    this.emit('x:change', this.x)
+    this.emit('move:x', this.x)
   }
 
   Thumb.prototype.emitYAxisChange = function() {
-    this.emit('y:change', this.y)
+    this.emit('move:y', this.y)
   }
-      
+  
+  Thumb.prototype.emitReleaseEvent = function() {
+    this.emit('release')
+  }
+
   return Thumb
 })()
 
