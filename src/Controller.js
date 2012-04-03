@@ -13,10 +13,6 @@ Controller = (function() {
     
   }
 
-  Controller.prototype.init = function() {
-    
-  }
-
   return Controller
 })()
 
