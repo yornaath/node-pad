@@ -2,4 +2,4 @@
 
 path = node_modules/node-hid
 
-url = git@github.com:andtan/node-hid.git
+url = git://github.com/andtan/node-hid.git
