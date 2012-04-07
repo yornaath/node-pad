@@ -1,4 +1,59 @@
 
+
+
+
+var Controller = require('./Controller.js'),
+    Button = require('./Button'),
+    PressureButton = require('./PressureButton'),
+    PressureDpad = require('./PressureDpad'),
+    Thumb = require('./Thumb'),
+    classextends = require('./classextends')
+
+
+var Dualshock = (function() {
+    
+    classextends(Dualshock, Controller)
+
+    function Dualshock() {
+      Dualshock.__super__.constructor.apply(this, arguments)
+    }
+
+    Dualshock.productName = 'PLAYSTATION(R)3 Controller'
+
+    Dualshock.prototype.layout = {
+      'cross': new PressureButton(),
+      'square': new PressureButton(),
+      'triangle': new PressureButton(),
+      'circle': new PressureButton(),
+      'l1': new Button(),
+      'l2': new Button(),
+      'l3': new Button(),
+      'r1': new Button(),
+      'r2': new Button(),
+      'r3': new Button(),
+      'lthumb': new Thumb({
+        deadzone: {
+          x: [126, 128],
+          x: [126, 128],
+        }
+      }),
+      'rthumb': new Thumb({
+        deadzone: {
+          x: [126, 128],
+          x: [126, 128],
+        }
+      }),
+      'dpad': new PressureDpad(),
+      'start': new Button(),
+      'select': new Button(),
+    }
+
+    return Dualshock
+})()
+
+module.exports = Dualshock
+
+/*
 var Controller = require("./Controller"),
     classextends = require('./classextends')
 
@@ -76,6 +131,5 @@ Dualshock = (function() {
 
   return Dualshock
 })()
+*/
 
-
-module.exports = Dualshock
