@@ -1,16 +1,13 @@
 {
   "author": "Andre Tangen @gorillatron <jornandretangen@gmail.com>",
-  "name": "node-stick",
+  "name": "node-pad",
   "description": "Game controllers for node",
-  "version": "0.0.0",
+  "version": "0.0.11",
   "repository": {
     "type": "git",
-    "url": "git://github.com/andtan/TimeTrial.git"
+    "url": "git://github.com/andtan/node-pad.git"
   },
-  "scripts": {
-    "install": "git submodule init && git submodule update && cd node_modules/node-hid && git submodule init && git submodule update && cd src/ && node-waf configure build && cd ../../../"
-  },
-  "main": "./index.js",
+  "main": "./src/index.js",
   "engines": {
     "node": "~0.6.11"
   },
