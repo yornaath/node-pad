@@ -7,7 +7,7 @@ var dualShockPortController = null
 
 var api = {}
 
-Object.defineProperty(api, 'dualshock', {
+Object.defineProperty(api, 'dualshock3', {
   get: function() {
     if(dualShockPortController) {
       return dualShockPortController
