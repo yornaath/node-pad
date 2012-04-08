@@ -134,7 +134,62 @@ describe('Thumb', function() {
         expect(this.releasedThumb).toEqual(true)
       })
     })
-  
+    
+    it('Should not fire a "release" event if x or y val changes within the deadzone boundaries', function() {
+      var self = this,
+          thumb = new Thumb({
+            x: 50,
+            y: 50,
+            deadzone: {
+              x: [45, 55],
+              y: [46, 56]
+            }
+          })
+      thumb.x = 50
+      thumb.y = 50
+      thumb.on('release', function() {
+        self.releaseFired = true
+      })
+      thumb.x = 51
+      thumb.y = 53
+      thumb.x = 47
+      thumb.y = 52
+      waits(100)
+      runs(function() {
+        expect(this.releaseFired).toBeFalsy()
+      })
+    })
+
+    it('Should fire a "move" event on every move of either x or y and pass an event with new x and y values as parameter', function() {
+      var self = this,
+          i = 0,
+          thumb = new Thumb({
+            x: 10,
+            y: 12,
+            deadzone: {
+              x: [45, 55],
+              y: [46, 56]
+            }
+          })
+      self.oldx = 10
+      self.oldy = 12
+      thumb.on('move', function(event) {
+        self.newx = event.x
+        self.newy = event.y
+        i++
+      })
+      thumb.x = 23
+      thumb.y = 20
+      waitsFor(function(){
+        return i === 2
+      }, 'Event didnt fire for both move:x and move:y events', 100)
+      expect(function() {
+        expect(this.oldx).toEqual(10)
+        expect(this.oldy).toEqual(12)
+        expect(this.newx).toEqual(23)
+        expect(this.newy).toEqual(12)
+      })
+    })
   })
 
 })

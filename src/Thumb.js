@@ -4,18 +4,15 @@ require('./Object.js')
 var events = require("events"),
     classextends = require('./classextends')
 
-
 var Thumb;
-
 
 Thumb = (function(){
   
   classextends(Thumb, events.EventEmitter)
-
   function Thumb(options){
     Thumb.__super__.constructor.apply(this, arguments)
     this.config = Thumb.defaultConfig
-    options && options.deadzone ? this.config.deadzone = options.deadzone : void 0
+    options && options.deadzone ? this.config.deadzone = options.deadzone : this.config.deadzone = false
     this.axis = {
       x: {
         state: options && options.x ? options.x : 0
@@ -35,10 +32,10 @@ Thumb = (function(){
       oldState = this.axis.x.state
       this.axis.x.state = state
       oldState !== this.axis.x.state ?
-        this.config.deadzone.x !== false ?
+        this.config.deadzone.x ?
           state < this.config.deadzone.x[0] || state > this.config.deadzone.x[1] ?
             this.emitXAxisChange()
-          : this.released ? this.emitReleaseEvent() : void 0
+          : !this.isWithinXDeadzone(oldState) && this.released ? this.emitReleaseEvent() : void 0
         : this.emitXAxisChange()
       : void 0
     }
@@ -53,10 +50,10 @@ Thumb = (function(){
       oldState = this.axis.y.state
       this.axis.y.state = state
       oldState !== this.axis.y.state ?
-        this.config.deadzone.y !== false ?
+        this.config.deadzone.y ?
           state < this.config.deadzone.y[0] || state > this.config.deadzone.y[1] ?
             this.emitYAxisChange()
-          : this.released ? this.emitReleaseEvent() : void 0
+          : !this.isWithinYDeadzone(oldState) && this.released ? this.emitReleaseEvent() : void 0
         : this.emitYAxisChange()
       : void 0
     }
@@ -64,10 +61,13 @@ Thumb = (function(){
 
   Object.defineProperty(Thumb.prototype, 'released', {
     get: function() {
-      return (this.x > this.config.deadzone.x[0] && this.x < this.config.deadzone.x[1]) && 
-      (this.y > this.config.deadzone.y[0] && this.y < this.config.deadzone.y[1]) ?
-        true
-      : false
+      if(this.config.deadzone) {
+        if((this.x > this.config.deadzone.x[0] && this.x < this.config.deadzone.x[1]) && (this.y > this.config.deadzone.y[0] && this.y < this.config.deadzone.y[1])) {
+          return true
+        }
+        return false
+      }
+      return false
     }
   })
 
@@ -78,16 +78,45 @@ Thumb = (function(){
     }
   }
 
+  Thumb.prototype.isWithinYDeadzone = function(y) {
+    if(this.config.deadzone) {
+      if(y > this.config.deadzone.y[0] && y < this.config.deadzone.y[1]) {
+        return true
+      }
+      return false
+    }
+    return false
+  }
+
+  Thumb.prototype.isWithinXDeadzone = function(x) {
+    if(this.config.deadzone) {
+      if(x > this.config.deadzone.x[0] && x < this.config.deadzone.x[1]) {
+        return true
+      }
+      return false
+    }
+    return false
+  }
+
   Thumb.prototype.emitXAxisChange = function() {
     this.emit('move:x', this.x)
+    this.emitMove()
   }
 
   Thumb.prototype.emitYAxisChange = function() {
     this.emit('move:y', this.y)
+    this.emitMove()
   }
   
   Thumb.prototype.emitReleaseEvent = function() {
     this.emit('release')
+  }
+
+  Thumb.prototype.emitMove = function() {
+    this.emit('move', {
+      x: this.x,
+      y: this.y,
+    })
   }
 
   return Thumb
