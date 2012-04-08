@@ -1,7 +1,7 @@
 
 var PortController = require('./PortController'),
     Controller = require('./Controller'),
-    DualShock = require('./DualShock')
+    DualShock3 = require('./DualShock3')
 
 var dualShockPortController = null
 
@@ -13,7 +13,7 @@ Object.defineProperty(api, 'dualshock', {
       return dualShockPortController
     }
     dualShockPortController = new PortController()
-    dualShockPortController.Controller = DualShock
+    dualShockPortController.Controller = DualShock3
     return dualShockPortController  
   }
 })

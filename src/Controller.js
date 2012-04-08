@@ -10,6 +10,7 @@ Controller = (function() {
   classextends(Controller, events.EventEmitter)
   
   function Controller() {
+    this.layout = this.getLayout()
     this.connected = 0
     this.on('error', function() {
       if(this.connected) {
