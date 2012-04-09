@@ -2,7 +2,7 @@
   "author": "Andre Tangen @gorillatron <jornandretangen@gmail.com>",
   "name": "node-pad",
   "description": "Game controllers for node",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "repository": {
     "type": "git",
     "url": "git://github.com/andtan/node-pad.git"
@@ -12,7 +12,7 @@
     "node": "~0.6.11"
   },
   "dependencies": {
-    "node-hid": "0.0.13"
+    "node-hid": "0.0.15"
   },
   "devDependencies": {
     "jasmine-node": "1.0.20"
