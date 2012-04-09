@@ -7,12 +7,17 @@
     "type": "git",
     "url": "git://github.com/andtan/node-pad.git"
   },
-  "main": "./src/index.js",
+  "main": "./index.js",
   "engines": {
     "node": "~0.6.11"
   },
   "dependencies": {
     "node-hid": "0.0.13"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine-node": "1.0.20"
+  },
+  "scripts": {
+    "test": "jasmine-node ./tests/"
+  }
 }
