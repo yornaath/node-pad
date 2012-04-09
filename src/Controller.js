@@ -1,7 +1,6 @@
 
 var events = require("events"),
-    classextends = require('./classextends'),
-    HID = require("../node_modules/node-hid/src/HID")
+    classextends = require('./classextends')
 
 var Controller
 
