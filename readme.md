@@ -196,7 +196,23 @@ function(){}
 
 
 
+### Development
+To hack on this module please fork it and get all ninja on it. But remember to install the node-hid dependency.  
 
+```
+# clone your fork
+git clone "your.fork.url"
+cd node-pad
+# install dependencies
+npm install
+```
+
+To run tests  
+
+```
+cd node-pad
+npm test
+```
 
 
 
