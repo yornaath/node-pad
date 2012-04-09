@@ -11,6 +11,8 @@
   "engines": {
     "node": "~0.6.11"
   },
-  "dependencies": {},
+  "dependencies": {
+    "andtan-node-hid": "0.0.1",
+  },
   "devDependencies": {}
 }
