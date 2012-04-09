@@ -98,57 +98,100 @@ The controller object has buttons, dpads and thumbs(sticks) that you can bind ev
 ### dualshock3
 The dualshock3 controller object has this layout:
 
-#### cross, square, circle, triangle
-These buttons are pressure sensitive and emits the followin events:  
+#### Pressure buttons
+Thes following buttons are pressure sensitive.
+
+* controller.cross
+* controller.square
+* controller.triangle
+* controller.circle
+* controller.r1
+* controller.r2
+* controller.l1
+* controller.l2
+* controller.dpad. up down right left
+
+They emit the followng events
+
+##### Event 'press'  
 
 ```javascript
-controller.button.emit('press', pressure)
-controller.button.emit('release')
-controller.button.emit('pressurechange', newpressure)
+function(pressure){}
 ```
 
-#### r1, r2, l1, l2
-These buttons are pressure sensitive and emits the followin events:  
+##### Event 'pressurechange'  
 
 ```javascript
-controller.button.emit('press', pressure)
-controller.button.emit('release')
-controller.button.emit('pressurechange', newpressure)
+function(pressure){}
 ```
 
-#### r3, l3
-These are buttons and emits the followin events:  
+##### Event 'release'  
 
 ```javascript
-controller.button.emit('press', pressure)
-controller.button.emit('release')
+function(){}
 ```
 
-#### dpad.up, dpad.down, dpap.right, dpad.left
-These buttons are pressure sensitive and emits the followin events:  
+##### Event 'pressurechange'  
 
 ```javascript
-controller.dpad.direction.emit('press', pressure)
-controller.dpad.direction.emit('release')
-controller.dpad.direction.emit('pressurechange', newpressure)
+function(pressure){}
 ```
 
-#### lthumb, rthumb
-These are thumbs(sticks) and emits the folowing events  
+#### Buttons
+The following buttons are regular buttons:
+
+* controller.start
+* controller.select
+* controller.l3
+* controller.r3
+
+They emit the following events
+
+##### Event 'press'  
 
 ```javascript
-controller.thumb.emit('move', event)
-controller.thumb.emit('release')      //This is emited when the stick returns from and off to a centered position
-controller.thumb.emit('move:x', x)
-controller.thumb.emit('move:y', y)
+function(){}
 ```
 
-#### start, select
-These are buttons and emits the followin events:  
+##### Event 'release'  
 
 ```javascript
-controller.button.emit('press', pressure)
-controller.button.emit('release')
+function(){}
+```
+
+#### Thumbs
+Thumbs are controller joysticks and has a y and x position.
+
+* controller.lthumb
+* controller.rthumb
+
+They emit the following events
+
+##### Event 'move'  
+
+```javascript
+function(event){
+  event.x
+  event.y
+}
+```
+
+##### Event 'move:x'  
+
+```javascript
+function(x){}
+```
+
+##### Event 'move:y'  
+
+```javascript
+function(y){}
+```
+
+##### Event 'release'  
+
+```javascript
+function(){}
 ```
 
 
