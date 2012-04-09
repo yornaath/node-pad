@@ -1,7 +1,7 @@
 
-var PortController = require('./PortController'),
-    Controller = require('./Controller'),
-    DualShock3 = require('./DualShock3')
+var PortController = require('./src/PortController'),
+    Controller = require('./src/Controller'),
+    DualShock3 = require('./src/DualShock3')
 
 var dualShockPortController = null
 
