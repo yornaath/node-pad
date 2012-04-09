@@ -1,7 +1,7 @@
 
 var events = require("events"),
     classextends = require('./classextends'),
-    HID = require("../node_modules/node-hid/src/HID")
+    HID = require("node-hid")
 
 var PortController
 
