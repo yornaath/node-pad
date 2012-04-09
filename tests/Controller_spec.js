@@ -14,16 +14,18 @@ var ExtendedController = (function() {
       ExtendedController.__super__.constructor.apply(this, arguments)
     }
 
-    ExtendedController.prototype.layout = {
-      'a': new Button(),
-      'b': new Button(),
-      'thumb': new Thumb({
-        deadzone: {
-          x: [49, 51],
-          y: [49, 51]
-        }
-      }),
-      'dpad': new Dpad()
+    ExtendedController.prototype.getLayout = function() {
+      return {
+        'a': new Button(),
+        'b': new Button(),
+        'thumb': new Thumb({
+          deadzone: {
+            x: [49, 51],
+            y: [49, 51]
+          }
+        }),
+        'dpad': new Dpad()
+      }
     }
 
     return ExtendedController
