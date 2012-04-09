@@ -1,4 +1,4 @@
-# node-stick
+# node-pad
 Is a library for using game controllers with nodejs. Currently only the dualshock 3 is supported, but support for xbox360 controller is planned for a future release.
 
 ##Installation
