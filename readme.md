@@ -131,12 +131,6 @@ function(pressure){}
 function(){}
 ```
 
-##### Event 'pressurechange'  
-
-```javascript
-function(pressure){}
-```
-
 #### Buttons
 The following buttons are regular buttons:
 
